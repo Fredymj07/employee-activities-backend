@@ -1,29 +1,21 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
+import express from 'express';
+import bodyParser from 'body-parser';
 const app = express();
-const { Pool } = require('pg');
-const routes = require('./routes/routes');
-const cors = require('cors');
+import { conection } from './utilities/db.js';
+import { router } from './routes/routes.js';
+import cors from 'cors';
+import { loginController } from './controllers/Login.controller.js';
+import { homeController } from './controllers/Home.controller.js';
+import { newActivityController } from './controllers/NewActivity.controller.js';
+import { activityDetailController } from './controllers/ActivityDetail.controller.js';
+import { userProfileController } from './controllers/UserProfile.controller.js';
 
 /* Settigns */
+(async () => {
+    await conection();
+})();
+
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
-
-const pool  = new Pool ({
-    host: 'localhost',
-    database: 'dbactivities',
-    user: 'devmontana',
-    password: '+HomerO0701'
-});
-
-pool.connect((error) => {
-    if (error) {
-        throw error;
-    } else {
-        console.log('Conexión exitosa con la base de datos...');
-    }
-});
 
 /* Middelwares */
 app.use((req, res, next) => {
@@ -37,7 +29,12 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
 
 /* Routes */
-app.use(routes);
+app.use(router);
+app.use(loginController);
+app.use(homeController);
+app.use(newActivityController);
+app.use(activityDetailController);
+app.use(userProfileController);
 
 app.get("/api", (req, res) => {
     res.json({ message: 'Hola desde el servidor de Nodejs!!!' });
