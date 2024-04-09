@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Proyecto construido en Nodejs cuya finalidad es alojar el backend de la aplicación web donde se registrarán las actividades realizadas por un empleado en una jornada laboral.",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
