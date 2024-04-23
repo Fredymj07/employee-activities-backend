@@ -1,9 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-const app = express();
-import { conection } from './utilities/db.js';
-import { router } from './routes/routes.js';
+import dotenv from 'dotenv';
 import cors from 'cors';
+dotenv.config();
+const app = express();
+import { testConection } from './libs/sequelize.js';
+import { routerApiEmployee } from './routes/routes.js';
 import { loginController } from './controllers/Login.controller.js';
 import { homeController } from './controllers/Home.controller.js';
 import { newActivityController } from './controllers/NewActivity.controller.js';
@@ -12,7 +14,7 @@ import { userProfileController } from './controllers/UserProfile.controller.js';
 
 /* Settigns */
 (async () => {
-    await conection();
+    await testConection();
 })();
 
 app.set('port', process.env.PORT || 3000);
@@ -25,11 +27,10 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-
 app.use(cors());
 
 /* Routes */
-app.use(router);
+routerApiEmployee(app);
 app.use(loginController);
 app.use(homeController);
 app.use(newActivityController);
