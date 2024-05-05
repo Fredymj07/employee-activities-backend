@@ -1,8 +1,14 @@
-import express from 'express';
-import {employeeRouter}  from './employee.router.js';
+/* Importaciones externas */
+const { Router } = require('express');
+const router = Router();
 
-export function routerApiEmployee(app) {
-    const router = express.Router();
-    app.use('/api/v1', router);
-    router.use('employee', employeeRouter);
-}
+/* Importaciones internas */
+const { getEmployees, getEmployeeById, createEmployee, updateEmployee, deleteEmployee } = require('../controllers/employee.controller');
+
+router.get('/api/v1/employees', getEmployees)
+router.get('/api/v1/:id', getEmployeeById)
+router.post('/api/v1/employee', createEmployee)
+router.put('/api/v1/:id', updateEmployee)
+router.delete('/api/v1/:id', deleteEmployee);
+
+module.exports = router;
