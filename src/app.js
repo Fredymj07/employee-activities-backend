@@ -1,20 +1,16 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
-import cors from 'cors';
-dotenv.config();
+/* Importaciones externas */
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
+/* Importaciones internas */
 const app = express();
-import { testConection } from './libs/sequelize.js';
-import { routerApiEmployee } from './routes/routes.js';
-import { loginController } from './controllers/Login.controller.js';
-import { homeController } from './controllers/Home.controller.js';
-import { newActivityController } from './controllers/NewActivity.controller.js';
-import { activityDetailController } from './controllers/ActivityDetail.controller.js';
-import { userProfileController } from './controllers/UserProfile.controller.js';
+const { pool } = require('./db/connection');
+const { router } = require('./routes/routes');
 
 /* Settigns */
 (async () => {
-    await testConection();
+    await pool;
 })();
 
 app.set('port', process.env.PORT || 3000);
@@ -30,14 +26,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
 
 /* Routes */
-routerApiEmployee(app);
-app.use(loginController);
-app.use(homeController);
-app.use(newActivityController);
-app.use(activityDetailController);
-app.use(userProfileController);
+app.use(require('./routes/routes'));
 
-app.get("/api", (req, res) => {
+app.get("/api/v1", (req, res) => {
     res.json({ message: 'Hola desde el servidor de Nodejs!!!' });
   });
 
